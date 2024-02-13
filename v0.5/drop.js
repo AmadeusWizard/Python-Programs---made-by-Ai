@@ -2,27 +2,27 @@ const cron = require('node-cron');
 const fs = require('fs');
 const { exec } = require('child_process');
 
-// NastavenÃ­ kÃ³dovÃ¡nÃ­ na UTF-8
+// Nastavení kódování na UTF-8
 process.env.LANG = 'cs_CZ.UTF-8';
 process.env.LC_ALL = 'cs_CZ.UTF-8';
 
-// Funkce k vyÄiÅ¡tÄ›nÃ­ cache a zÃ¡pisu do souboru
+// Funkce k vyèištìní cache a zápisu do souboru
 function clearCacheAndLog() {
     exec('echo 3 > /proc/sys/vm/drop_caches', {
-        encoding: 'utf8', // NastavenÃ­ kÃ³dovÃ¡nÃ­ pro exec
+        encoding: 'utf8', // Nastavení kódování pro exec
     }, (error, stdout, stderr) => {
         if (error) {
-            console.error(`Chyba pÅ™i vyÄiÅ¡tÄ›nÃ­ cache: ${error.message}`);
+            console.error(`Chyba pøi vyèištìní cache: ${error.message}`);
             return;
         }
         
-        const logMessage = `Cache byla ÃºspÄ›Å¡nÄ› vyÄiÅ¡tÄ›na dne ${new Date().toLocaleString('cs-CZ', {timeZone: 'Europe/Prague'})}\n`; // PouÅ¾itÃ­ sprÃ¡vnÃ©ho locale pro ÄeskÃ½ jazyk
+        const logMessage = `Cache byla úspìšnì vyèištìna dne ${new Date().toLocaleString('cs-CZ', {timeZone: 'Europe/Prague'}).replace(/\u200C/g, '')}\n`;
         fs.appendFile('log_interval.txt', logMessage, 'utf8', (err) => {
             if (err) throw err;
-            console.log('LogovÃ¡nÃ­ do souboru probÄ›hlo ÃºspÄ›Å¡nÄ›.');
+            console.log('Logování do souboru probìhlo úspìšnì.');
         });
     });
 }
 
-// SpuÅ¡tÄ›nÃ­ funkce clearCacheAndLog kaÅ¾dÃ½ch 10 minut pomocÃ­ node-cron
+// Spuštìní funkce clearCacheAndLog kadıch 10 minut pomocí node-cron
 cron.schedule('*/10 * * * *', clearCacheAndLog);
