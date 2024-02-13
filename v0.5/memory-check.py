@@ -40,7 +40,7 @@ def drop_caches():
         print(f"Error dropping caches: {e}")
 
 #Set the desired interval between cleaning operations (in seconds).
-optimal_interval = 60 * 60  # 1 hodina = 60 minut × 60 sekund
+optimal_interval = 60 * 60  # 1 hodina = 60 minut Ã— 60 sekund
 while True:
     drop_partitions()
     drop_caches()
